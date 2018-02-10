@@ -2,8 +2,9 @@ SampleApp::Application.routes.draw do
   devise_for :users, :controllers => {
     :registrations => "registrations"
   }
-  resources :users, only: [:show]
-  root 'static_pages#home'
+  resources :users, only: [:show, :index, :destroy]
+  root  'static_pages#home'
+
   
   get "users/show"
   
