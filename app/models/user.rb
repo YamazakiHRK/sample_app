@@ -1,11 +1,11 @@
 class User < ActiveRecord::Base
   has_many :microposts, dependent: :destroy
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-  has_many :reverse_ralationships, foreign_key: "followed_id", 
-                                   class_name: "Rationship",
+  has_many :reverse_relationships, foreign_key: "followed_id", 
+                                   class_name: "Relationship",
                                    dependent: :destroy
-  has_many :followers, through: :reverse_ralationships
-  has_many :followed_users, through: :ralationships, source: :followed
+  has_many :followers, through: :reverse_relationships
+  has_many :followed_users, through: :relationships, source: :followed
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -18,15 +18,15 @@ class User < ActiveRecord::Base
   end
   
   def following?(other_user)
-    ralationships.find_by(followed_id: other_user.id)
+    relationships.find_by(followed_id: other_user.id)
   end
   
   def follow!(other_user)
-    ralationships.create!(followed_id: other_user.id)
+    relationships.create!(followed_id: other_user.id)
   end
   
   def unfollow!(other_user)
-    ralationships.find_by(followed_id: other_user.id).destroy
+    relationships.find_by(followed_id: other_user.id).destroy
   end
 
 end

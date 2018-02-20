@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @microposts = @user.microposts.paginate(page: params[:page])
   end
   
- def index
+  def index
     @users = User.paginate(page: params[:page])
   end
   
@@ -17,6 +17,20 @@ class UsersController < ApplicationController
     flash[:success] = "User destroyed"
     redirect_to users_url
   end
+  
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.followed_users.paginate(page: params[:page])
+    render 'show_follow'
+  end
+  
+  def followers
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
+  end 
   
   private
   
